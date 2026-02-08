@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<body>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'result.css' %}">
+    <h1>{{poll.name}}</h1>
+
+    <hr width="50%" align="center" size="0">
+
+    <h3>Ваши оценки:</h3>
+
+    <div class="table-container">
+        <!-- Левая колонка (вопросы) -->
+        <div class="column left-column">
+            <div class="header">❓ Вопросы</div>
+            {% for question in user_answers %}
+                <div class="cell">
+                    <div class="question-number">{{ forloop.counter }}</div>
+                    <div>{{ question.question.text }}</div>
+                </div>
+            {% empty %}
+                <div class="cell">
+                    <div class="no-data">Нет вопросов в опросе</div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Правая колонка (результаты) -->
+        <div class="column right-column">
+            <div class="header">⭐ Ваши результаты</div>
+            {% for result in user_answers %}
+                <div class="cell">
+                    {% if result != 'NULL' %}
+                        <span class="rating-value">{{ result.rating }}</span>
+                        <span>/ 5⭐</span>
+                        <div class="rating-bar-container">
+                            <div class="rating-bar" style="width: {% widthratio result.rating 5 100 %}%"></div>
+                        </div>
+                    {% else %}
+                        <span class="no-data">Нет данных</span>
+                    {% endif %}
+                </div>
+            {% empty %}
+                <div class="cell">
+                    <div class="no-data">Нет данных для отображения</div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <h3>Средние оценки всех пользователей:</h3>
+    <div class="table-container">
+        <!-- Левая колонка (вопросы) -->
+        <div class="column left-column">
+            <div class="header">❓ Вопросы</div>
+            {% for item in avg_scores %}
+                <div class="cell">
+                    <div class="question-number">{{ forloop.counter }}</div>
+                    <div>{{ item.0 }}</div>
+                </div>
+            {% empty %}
+                <div class="cell">
+                    <div class="no-data">Нет вопросов в опросе</div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Правая колонка (результаты) -->
+        <div class="column right-column">
+            <div class="header">⭐ Результаты</div>
+            {% for question_text, avg in avg_scores %}
+                <div class="cell">
+                    {% if avg != 'NULL' %}
+                        <span class="rating-value">{{ avg }}</span>
+                        <span>/ 5⭐</span>
+                        <div class="rating-bar-container">
+                            <div class="rating-bar" style="width: {% widthratio avg 5 100 %}%"></div>
+                        </div>
+                    {% else %}
+                        <span class="no-data">Нет данных</span>
+                    {% endif %}
+                </div>
+            {% empty %}
+                <div class="cell">
+                    <div class="no-data">Нет данных для отображения</div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <a href="/" class="back-link">← Вернуться к списку опросов</a>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список опросов</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'Home.css' %}">
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Система опросов</h1>
+            <div class="user-info">
+                Привет, {{ user.username }}!
+            </div>
+        </div>
+
+        <div class="page-title">Доступные опросы</div>
+        <div class="page-subtitle">Выберите опрос из списка ниже, чтобы принять участие</div>
+
+        <div class="poll-count">Всего опросов: {{ polls|length }}</div>
+
+        {% if polls %}
+        <ul class="polls-list">
+            {% for poll in polls %}
+            <li class="poll-item">
+                <a href="/vote/{{ poll.id }}/" class="poll-link">{{ poll.name }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <div class="empty-state">
+            <h3>Опросы отсутствуют</h3>
+            <p>В данный момент нет доступных опросов.</p>
+        </div>
+        {% endif %}
+
+        <form method="post" action="{% url 'logout' %}" class="logout-form">
+            {% csrf_token %}
+            <button type="submit" class="logout-btn">Выйти из системы</button>
+        </form>
+    </div>
+</body>
+</html>

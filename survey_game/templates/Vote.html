@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ poll.name }} - Опрос</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'Vote.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="poll-title">{{ poll.name }}</h1>
+            <p class="poll-subtitle">Пожалуйста, оцените каждый вопрос по 5-балльной шкале</p>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-text">
+                <span>Прогресс опроса</span>
+                <span id="progress-percentage">0%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+        </div>
+
+        <form method="post" id="poll-form">
+            {% csrf_token %}
+            <div class="questions-container">
+                {% for q in questions %}
+                <div class="question-card">
+                    <div class="question-number">{{ forloop.counter }}</div>
+                    <p class="question-text">{{ q.text }}</p>
+                    <div class="rating-container">
+                        {% for i in "12345" %}
+                        <div class="rating-option">
+                            <input type="radio" name="rating_{{ q.id }}" value="{{ i }}" id="rating_{{ q.id }}_{{ i }}" class="rating-input">
+                            <label for="rating_{{ q.id }}_{{ i }}" class="rating-label">
+                                <i class="fas fa-star"></i>
+                            </label>
+                            <span class="rating-value">{{ i }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <button type="submit" class="submit-btn">
+                <i class="fas fa-paper-plane"></i> Отправить ответы
+            </button>
+        </form>
+
+        <a href="/" class="back-link">← Вернуться к списку опросов</a>
+    </div>
+
+    <script>
+        // Анимация прогресс-бара
+        document.addEventListener('DOMContentLoaded', function() {
+            const ratingInputs = document.querySelectorAll('.rating-input');
+            const totalQuestions = {{ questions|length }};
+            const progressFill = document.getElementById('progress-fill');
+            const progressPercentage = document.getElementById('progress-percentage');
+
+            // Проверяем, какие ответы уже выбраны (если есть сохраненные данные)
+            function updateProgress() {
+                let answeredCount = 0;
+
+                // Группируем радио-кнопки по вопросу
+                const questionGroups = {};
+                ratingInputs.forEach(input => {
+                    const name = input.name;
+                    if (!questionGroups[name]) {
+                        questionGroups[name] = [];
+                    }
+                    questionGroups[name].push(input);
+                });
+
+                // Проверяем, есть ли выбранный ответ в каждой группе
+                Object.values(questionGroups).forEach(group => {
+                    const hasAnswer = Array.from(group).some(input => input.checked);
+                    if (hasAnswer) answeredCount++;
+                });
+
+                // Обновляем прогресс-бар
+                const percentage = totalQuestions > 0 ? Math.round((answeredCount / totalQuestions) * 100) : 0;
+                progressFill.style.width = `${percentage}%`;
+                progressPercentage.textContent = `${percentage}%`;
+
+                // Меняем цвет прогресс-бара в зависимости от заполненности
+                if (percentage < 30) {
+                    progressFill.style.background = "#e74c3c";
+                } else if (percentage < 70) {
+                    progressFill.style.background = "#f39c12";
+                } else {
+                    progressFill.style.background = "linear-gradient(90deg, #4b6cb7 0%, #182848 100%)";
+                }
+            }
+
+            // Обработчик для всех радио-кнопок
+            ratingInputs.forEach(input => {
+                input.addEventListener('change', updateProgress);
+            });
+
+            // Инициализация прогресс-бара
+            updateProgress();
+
+            // Плавное появление вопросов
+            const questionCards = document.querySelectorAll('.question-card');
+            questionCards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+
+                setTimeout(() => {
+                    card.style.transition = 'opacity 0.5s, transform 0.5s';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 100 * index);
+            });
+
+            // Подтверждение отправки формы
+            const form = document.getElementById('poll-form');
+            form.addEventListener('submit', function(e) {
+                // Проверяем, все ли вопросы отвечены
+                const unanswered = [];
+                questionCards.forEach((card, index) => {
+                    const questionId = {{ questions.0.id }} + index; // Пример, нужно адаптировать под вашу структуру
+                    const inputs = document.querySelectorAll(`input[name="rating_{{ q.id }}"]`);
+                    let answered = false;
+
+                    inputs.forEach(input => {
+                        if (input.checked) answered = true;
+                    });
+
+                    if (!answered) unanswered.push(index + 1);
+                });
+
+                if (unanswered.length > 0) {
+                    e.preventDefault();
+                    const confirmSend = confirm(`Вы не ответили на вопросы: ${unanswered.join(', ')}. Всё равно отправить?`);
+                    if (!confirmSend) return;
+                }
+
+                // Анимация кнопки отправки
+                const submitBtn = document.querySelector('.submit-btn');
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Отправка...';
+                submitBtn.disabled = true;
+            });
+        });
+    </script>
+</body>
+</html>
