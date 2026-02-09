@@ -33,3 +33,10 @@ Django-приложение для создания и проведения он
 - SECRET_KEY - Секретный ключ Django
 - DEBUG - Режим отладки
 - ALLOWED_HOSTS - Разрешенные домены	
+
+### Скриншоты
+<img width="1911" height="970" alt="image" src="https://github.com/user-attachments/assets/360500d1-fab3-4d2f-8b58-59919c8959b0" />
+<img width="1905" height="992" alt="image" src="https://github.com/user-attachments/assets/00c0ca3d-d5cc-4e18-b0c7-f50926345def" />
+<img width="1919" height="998" alt="image" src="https://github.com/user-attachments/assets/5ee6b577-a806-4e4a-a598-82f76e15b124" />
+
+
