@@ -19,11 +19,14 @@
 
         <div class="progress-container">
             <div class="progress-text">
-                <span>Прогресс опроса</span>
+                <span>Прогресс заполнения</span>
                 <span id="progress-percentage">0%</span>
             </div>
             <div class="progress-bar">
                 <div class="progress-fill" id="progress-fill"></div>
+            </div>
+            <div class="progress-stats">
+                Отвечено: <span id="answered-count">0</span> из <span id="total-questions">{{ questions|length }}</span> вопросов
             </div>
         </div>
 
@@ -31,13 +34,15 @@
             {% csrf_token %}
             <div class="questions-container">
                 {% for q in questions %}
-                <div class="question-card">
+                <div class="question-card" data-question-id="{{ q.id }}">
                     <div class="question-number">{{ forloop.counter }}</div>
                     <p class="question-text">{{ q.text }}</p>
                     <div class="rating-container">
                         {% for i in "12345" %}
                         <div class="rating-option">
-                            <input type="radio" name="rating_{{ q.id }}" value="{{ i }}" id="rating_{{ q.id }}_{{ i }}" class="rating-input">
+                            <input type="radio" name="rating_{{ q.id }}" value="{{ i }}"
+                                   id="rating_{{ q.id }}_{{ i }}" class="rating-input question-radio"
+                                   data-question-id="{{ q.id }}">
                             <label for="rating_{{ q.id }}_{{ i }}" class="rating-label">
                                 <i class="fas fa-star"></i>
                             </label>
@@ -58,55 +63,97 @@
     </div>
 
     <script>
-        // Анимация прогресс-бара
         document.addEventListener('DOMContentLoaded', function() {
-            const ratingInputs = document.querySelectorAll('.rating-input');
-            const totalQuestions = {{ questions|length }};
+            const radioButtons = document.querySelectorAll('.question-radio');
             const progressFill = document.getElementById('progress-fill');
             const progressPercentage = document.getElementById('progress-percentage');
+            const answeredCountElement = document.getElementById('answered-count');
+            const totalQuestions = {{ questions|length }};
+            const answeredQuestions = new Set();
+            const form = document.getElementById('poll-form');
 
-            // Проверяем, какие ответы уже выбраны (если есть сохраненные данные)
+            // Функция обновления прогресса
             function updateProgress() {
-                let answeredCount = 0;
+                const answered = answeredQuestions.size;
+                const percentage = Math.round((answered / totalQuestions) * 100);
 
-                // Группируем радио-кнопки по вопросу
-                const questionGroups = {};
-                ratingInputs.forEach(input => {
-                    const name = input.name;
-                    if (!questionGroups[name]) {
-                        questionGroups[name] = [];
-                    }
-                    questionGroups[name].push(input);
-                });
+                progressFill.style.width = percentage + '%';
+                progressPercentage.textContent = percentage + '%';
+                answeredCountElement.textContent = answered;
 
-                // Проверяем, есть ли выбранный ответ в каждой группе
-                Object.values(questionGroups).forEach(group => {
-                    const hasAnswer = Array.from(group).some(input => input.checked);
-                    if (hasAnswer) answeredCount++;
-                });
-
-                // Обновляем прогресс-бар
-                const percentage = totalQuestions > 0 ? Math.round((answeredCount / totalQuestions) * 100) : 0;
-                progressFill.style.width = `${percentage}%`;
-                progressPercentage.textContent = `${percentage}%`;
-
-                // Меняем цвет прогресс-бара в зависимости от заполненности
                 if (percentage < 30) {
                     progressFill.style.background = "#e74c3c";
                 } else if (percentage < 70) {
                     progressFill.style.background = "#f39c12";
+                } else if (percentage < 100) {
+                    progressFill.style.background = "#3498db";
                 } else {
                     progressFill.style.background = "linear-gradient(90deg, #4b6cb7 0%, #182848 100%)";
                 }
             }
 
-            // Обработчик для всех радио-кнопок
-            ratingInputs.forEach(input => {
-                input.addEventListener('change', updateProgress);
+            // Обработчик для радио-кнопок
+            radioButtons.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    const questionId = this.getAttribute('data-question-id');
+                    answeredQuestions.add(questionId);
+                    updateProgress();
+                });
             });
 
-            // Инициализация прогресс-бара
-            updateProgress();
+            // Проверяем предзаполненные ответы
+            function checkInitialAnswers() {
+                radioButtons.forEach(radio => {
+                    if (radio.checked) {
+                        const questionId = radio.getAttribute('data-question-id');
+                        answeredQuestions.add(questionId);
+                    }
+                });
+                updateProgress();
+            }
+
+            // Инициализация
+            checkInitialAnswers();
+
+            // Обработчик отправки формы
+            form.addEventListener('submit', function(e) {
+                // Сохраняем исходное состояние кнопки
+                const submitBtn = document.querySelector('.submit-btn');
+                const originalHTML = submitBtn.innerHTML;
+                const originalDisabled = submitBtn.disabled;
+
+                // Меняем кнопку на состояние загрузки
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Отправка...';
+                submitBtn.disabled = true;
+
+                // Проверяем, все ли вопросы отвечены
+                if (answeredQuestions.size < totalQuestions) {
+                    // Показываем диалог подтверждения
+                    const userConfirmed = confirm(
+                        `Вы ответили на ${answeredQuestions.size} из ${totalQuestions} вопросов. Всё равно отправить?`
+                    );
+
+                    if (!userConfirmed) {
+                        // Если пользователь нажал "Отмена"
+                        // Восстанавливаем кнопку и предотвращаем отправку
+                        e.preventDefault();
+                        submitBtn.innerHTML = originalHTML;
+                        submitBtn.disabled = originalDisabled;
+                        console.log('Пользователь отменил отправку формы');
+                        return;
+                    }
+                    // Если пользователь нажал "OK" - форма отправится
+                    console.log('Пользователь подтвердил отправку неполной формы');
+                } else {
+                    console.log('Все вопросы отвечены, отправка формы');
+                }
+
+                // Автоматически восстанавливаем кнопку через 5 секунд на случай ошибки отправки
+                setTimeout(() => {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalHTML;
+                }, 5000);
+            });
 
             // Плавное появление вопросов
             const questionCards = document.querySelectorAll('.question-card');
@@ -115,39 +162,10 @@
                 card.style.transform = 'translateY(20px)';
 
                 setTimeout(() => {
-                    card.style.transition = 'opacity 0.5s, transform 0.5s';
+                    card.style.transition = 'opacity 0.3s, transform 0.3s';
                     card.style.opacity = '1';
                     card.style.transform = 'translateY(0)';
                 }, 100 * index);
-            });
-
-            // Подтверждение отправки формы
-            const form = document.getElementById('poll-form');
-            form.addEventListener('submit', function(e) {
-                // Проверяем, все ли вопросы отвечены
-                const unanswered = [];
-                questionCards.forEach((card, index) => {
-                    const questionId = {{ questions.0.id }} + index; // Пример, нужно адаптировать под вашу структуру
-                    const inputs = document.querySelectorAll(`input[name="rating_{{ q.id }}"]`);
-                    let answered = false;
-
-                    inputs.forEach(input => {
-                        if (input.checked) answered = true;
-                    });
-
-                    if (!answered) unanswered.push(index + 1);
-                });
-
-                if (unanswered.length > 0) {
-                    e.preventDefault();
-                    const confirmSend = confirm(`Вы не ответили на вопросы: ${unanswered.join(', ')}. Всё равно отправить?`);
-                    if (!confirmSend) return;
-                }
-
-                // Анимация кнопки отправки
-                const submitBtn = document.querySelector('.submit-btn');
-                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Отправка...';
-                submitBtn.disabled = true;
             });
         });
     </script>
