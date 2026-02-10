@@ -41,7 +41,6 @@ secrets.py
 SECRET_KEY.txt
 
 # 5. Файлы IDE
-.vscode/
 .idea/
 *.swp
 *.swo
@@ -55,3 +54,7 @@ desktop.ini
 # 7. Логи
 *.log
 local.log
+
+
+/survey_game/migrations/
+migrations

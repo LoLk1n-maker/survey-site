@@ -3,7 +3,6 @@ from django.contrib.auth.decorators import login_required
 from .models import *
 from .forms import UserRegisterForm
 
-
 def register(request):
     if request.method == 'POST':
         form = UserRegisterForm (request.POST)
@@ -65,3 +64,20 @@ def results(request, poll_id):
 
     return render(request, 'results.html', context={"poll": poll, "user_answers":user_answers, "avg_scores":avg_scores})
 
+@login_required
+def create(request):
+    if request.method == 'POST':
+        poll_name = request.POST.get('poll_name')
+
+        # Создаем опрос
+        poll = Poll.objects.create(name=poll_name)
+
+        # Собираем все вопросы
+        for key, value in request.POST.items():
+            if key.startswith('question_'):
+                Question.objects.create(text=value, poll=poll)
+
+        return redirect('home')
+
+
+    return render(request, 'create.html')

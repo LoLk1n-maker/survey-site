@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Создание опроса</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'Create.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <h2>Создание нового опроса</h2>
+
+        <form method="post" id="poll-form">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="poll-name">Название опроса:</label>
+                <input type="text" id="poll-name" name="poll_name" placeholder="Введите название опроса" required>
+            </div>
+
+            <div class="questions-container" id="questions-container">
+                <h3>Вопросы:</h3>
+                <div id="question-list">
+                    <!-- Вопросы будут добавляться здесь -->
+                </div>
+
+                <button type="button" class="add-btn" id="add-question">
+                    <i class="fas fa-plus"></i> Добавить вопрос
+                </button>
+
+                <div class="question-counter" id="question-counter">
+                    Вопросов: 0
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">
+                <i class="fas fa-check"></i> Создать опрос
+            </button>
+        </form>
+
+        <a href="/" class="back-link">
+            <i class="fas fa-arrow-left"></i> Вернуться к списку опросов
+        </a>
+    </div>
+
+    <script>
+        let questionCount = 0;
+
+        document.getElementById('add-question').addEventListener('click', function() {
+            questionCount++;
+
+            const questionDiv = document.createElement('div');
+            questionDiv.className = 'question-item';
+            questionDiv.innerHTML = `
+                <div class="question-input">
+                    <input type="text"
+                           name="question_${questionCount}"
+                           placeholder="Введите текст вопроса ${questionCount}"
+                           required>
+                </div>
+                <button type="button" class="remove-btn" onclick="removeQuestion(this)">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+
+            document.getElementById('question-list').appendChild(questionDiv);
+            updateQuestionCounter();
+        });
+
+        function removeQuestion(button) {
+            const questionItem = button.closest('.question-item');
+            questionItem.remove();
+            updateQuestionCounter();
+        }
+
+        function updateQuestionCounter() {
+            const questions = document.querySelectorAll('.question-item');
+            document.getElementById('question-counter').textContent = `Вопросов: ${questions.length}`;
+        }
+
+        // Добавляем первый вопрос автоматически при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('add-question').click();
+        });
+    </script>
+</body>
+</html>

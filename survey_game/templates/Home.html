@@ -37,10 +37,14 @@
         </div>
         {% endif %}
 
-        <form method="post" action="{% url 'logout' %}" class="logout-form">
-            {% csrf_token %}
-            <button type="submit" class="logout-btn">Выйти из системы</button>
-        </form>
+        <div class="bottom-actions">
+            <a href="/create" class="create-poll-btn">Создать опрос</a>
+            <form method="post" action="{% url 'logout' %}" class="logout-form">
+                {% csrf_token %}
+                <button type="submit" class="logout-btn">Выйти из системы</button>
+            </form>
+        </div>
     </div>
+
 </body>
 </html>
