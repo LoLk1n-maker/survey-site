@@ -1,16 +1,20 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from .models import *
-from .forms import UserRegisterForm
+from .forms import *
 
 def register(request):
     if request.method == 'POST':
-        form = UserRegisterForm (request.POST)
+        form = UserRegistrationForm(request.POST)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Аккаунт успешно создан! Теперь вы можете войти.')
             return redirect('login')
+        else:
+            messages.error(request, 'Пожалуйста, исправьте ошибки в форме.')
     else:
-        form = UserRegisterForm()
+        form = UserRegistrationForm()
     return render(request, 'register.html', {'form': form})
 
 @login_required
