@@ -102,22 +102,6 @@ input[type="text"] {
     background: #0b7dda;
 }
 
-.back-link {
-    display: inline-block;
-    margin-top: 20px;
-    color: #666;
-    text-decoration: none;
-    padding: 8px 16px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    transition: all 0.3s;
-}
-
-.back-link:hover {
-    background: #f0f0f0;
-    color: #333;
-}
-
 .question-counter {
     color: #666;
     font-size: 14px;
@@ -126,4 +110,16 @@ input[type="text"] {
 
 .questions-container {
     margin: 20px 0;
+}
+.back-link {
+    display: inline-block;
+    margin-top: 25px;
+    color: #4a6ee0;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 16px;
+    padding: 10px 20px;
+    border: 1px solid #4a6ee0;
+    border-radius: 6px;
+    transition: all 0.2s ease;
 }
