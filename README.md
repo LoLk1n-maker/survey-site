@@ -47,8 +47,9 @@ Django-приложение для создания и проведения он
 <img width="1915" height="982" alt="image" src="https://github.com/user-attachments/assets/5995d71d-e71e-4f92-a800-6d4569f8dce9" />
 
 Просмотр результатов:
-<img width="1916" height="992" alt="image" src="https://github.com/user-attachments/assets/7fe36bd9-3f50-41e3-85e7-75365ce200d6" />
-<img width="1918" height="990" alt="image" src="https://github.com/user-attachments/assets/284394ac-7035-48cf-b626-220b672a670c" />
+<img width="1919" height="989" alt="image" src="https://github.com/user-attachments/assets/523586b6-96ed-4cf7-a1cf-f51f10dece3b" />
+<img width="1919" height="990" alt="image" src="https://github.com/user-attachments/assets/00ba603e-fa15-4c71-89ec-836da968f59c" />
+
 
 
 
