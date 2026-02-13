@@ -20,31 +20,71 @@
         <div class="page-title">Доступные опросы</div>
         <div class="page-subtitle">Выберите опрос из списка ниже, чтобы принять участие</div>
 
-        <div class="poll-count">Всего опросов: {{ polls|length }}</div>
-
-        {% if polls %}
-        <ul class="polls-list">
-            {% for poll in polls %}
-            <li class="poll-item">
-                <a href="/vote/{{ poll.id }}/" class="poll-link">{{ poll.name }}</a>
-            </li>
-            {% endfor %}
-        </ul>
-        {% else %}
-        <div class="empty-state">
-            <h3>Опросы отсутствуют</h3>
-            <p>В данный момент нет доступных опросов.</p>
+        <!-- ПОИСКОВАЯ СТРОКА -->
+        <div class="search-section">
+            <form method="get" action="{% url 'home' %}" class="search-form">
+                <div class="search-wrapper">
+                    <input
+                        type="text"
+                        name="q"
+                        class="search-input"
+                        placeholder="🔍 Поиск опросов..."
+                        value="{{ query }}"
+                        autocomplete="off"
+                    >
+                    <button type="submit" class="search-btn">Найти</button>
+                    {% if query %}
+                        <a href="{% url 'home' %}" class="clear-search">✕</a>
+                    {% endif %}
+                </div>
+            </form>
         </div>
+
+        <!-- СТАТИСТИКА ПОИСКА -->
+        <div class="poll-count">
+            {% if query %}
+                Найдено опросов: {{ search_result_count }} из {{ total_polls }}
+                <span class="search-query">по запросу "{{ query }}"</span>
+            {% else %}
+                Всего опросов: {{ polls|length }}
+            {% endif %}
+        </div>
+
+        <!-- РЕЗУЛЬТАТЫ ПОИСКА -->
+        {% if polls %}
+            <ul class="polls-list">
+                {% for poll in polls %}
+                    <li class="poll-item">
+                        <a href="/vote/{{ poll.id }}/" class="poll-link">
+                            {{ poll.name }}
+                            {% if query %}
+                                <!-- Подсветка совпадений (опционально) -->
+                                <span class="match-info">содержит "{{ query }}"</span>
+                            {% endif %}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <div class="empty-state">
+                {% if query %}
+                    <h3>😕 Ничего не найдено</h3>
+                    <p>По запросу "{{ query }}" опросов не найдено.</p>
+                    <a href="{% url 'home' %}" class="reset-search">Сбросить поиск</a>
+                {% else %}
+                    <h3>Опросы отсутствуют</h3>
+                    <p>В данный момент нет доступных опросов.</p>
+                {% endif %}
+            </div>
         {% endif %}
 
         <div class="bottom-actions">
-            <a href="/create" class="create-poll-btn">Создать опрос</a>
+            <a href="/create" class="create-poll-btn">➕ Создать опрос</a>
             <form method="post" action="{% url 'logout' %}" class="logout-form">
                 {% csrf_token %}
-                <button type="submit" class="logout-btn">Выйти из системы</button>
+                <button type="submit" class="logout-btn">🚪 Выйти из системы</button>
             </form>
         </div>
     </div>
-
 </body>
 </html>

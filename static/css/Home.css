@@ -169,3 +169,154 @@ body {
 .logout-form {
     margin: 0;
 }
+
+/* ===== ПОИСКОВАЯ СТРОКА ===== */
+.search-section {
+    margin: 25px 0 20px;
+}
+
+.search-form {
+    width: 100%;
+}
+
+.search-wrapper {
+    display: flex;
+    align-items: center;
+    position: relative;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.2s;
+}
+
+.search-wrapper:focus-within {
+    box-shadow: 0 4px 12px rgba(74, 110, 224, 0.15);
+    border-color: #4a6ee0;
+}
+
+.search-input {
+    flex: 1;
+    padding: 14px 20px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px 0 0 12px;
+    font-size: 16px;
+    outline: none;
+    transition: all 0.2s;
+}
+
+.search-input:focus {
+    border-color: #4a6ee0;
+    border-right-color: #e2e8f0;
+}
+
+.search-btn {
+    padding: 14px 28px;
+    background: #4a6ee0;
+    color: white;
+    border: 2px solid #4a6ee0;
+    border-radius: 0 12px 12px 0;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.search-btn:hover {
+    background: #3a5ed0;
+    border-color: #3a5ed0;
+}
+
+.clear-search {
+    position: absolute;
+    right: 120px;
+    color: #94a3b8;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 0 10px;
+}
+
+.clear-search:hover {
+    color: #e74c3c;
+}
+
+/* ===== СТАТИСТИКА ПОИСКА ===== */
+.poll-count {
+    background-color: #f8fafc;
+    padding: 12px 20px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #2c3e50;
+    font-weight: 500;
+    flex-wrap: wrap;
+}
+
+.search-query {
+    background: #4a6ee0;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: normal;
+}
+
+/* ===== ПОДСВЕТКА РЕЗУЛЬТАТОВ ===== */
+.match-info {
+    display: inline-block;
+    margin-left: 12px;
+    padding: 3px 10px;
+    background: #fff3cd;
+    color: #856404;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+.poll-item {
+    transition: all 0.2s;
+}
+
+.poll-item:hover .match-info {
+    background: #ffe69c;
+}
+
+/* ===== ПУСТЫЕ РЕЗУЛЬТАТЫ ===== */
+.empty-state {
+    text-align: center;
+    padding: 50px 20px;
+    background: #f8fafc;
+    border-radius: 16px;
+    margin: 20px 0;
+}
+
+.empty-state h3 {
+    font-size: 22px;
+    color: #2c3e50;
+    margin-bottom: 12px;
+}
+
+.empty-state p {
+    color: #64748b;
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+
+.reset-search {
+    display: inline-block;
+    padding: 12px 28px;
+    background: #4a6ee0;
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.reset-search:hover {
+    background: #3a5ed0;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(74, 110, 224, 0.3);
+}

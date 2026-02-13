@@ -17,10 +17,26 @@ def register(request):
         form = UserRegistrationForm()
     return render(request, 'register.html', {'form': form})
 
+
 @login_required
 def home(request):
-    polls = Poll.objects.all()
-    return render(request, 'Home.html', {'polls': polls})
+    polls = Poll.objects.all().order_by('name')
+    query = request.GET.get('q', '')  # Получаем поисковый запрос из URL
+
+    print(query)
+    if query:
+        # Поиск по названию опроса
+        polls = Poll.objects.filter(name__icontains=query).order_by("name")
+
+
+
+    context = {
+        'polls': polls,
+        'query': query,  # передаем запрос обратно в шаблон
+        'total_polls': Poll.objects.count(),  # общее количество опросов
+        'search_result_count': polls.count() if query else None,  # количество найденных
+    }
+    return render(request, 'Home.html', context)
 
 @login_required
 def vote(request, poll_id):
