@@ -8,6 +8,19 @@ body {
     padding: 20px;
 }
 
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.header h1 {
+    color: #2c3e50;
+    font-size: 28px;
+}
+
 .login-card {
     background: white;
     height:100%;
