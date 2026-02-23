@@ -51,12 +51,6 @@ Django-приложение для создания и проведения он
 - DEBUG - Режим отладки
 - ALLOWED_HOSTS - Разрешенные домены	
 
-### Скриншоты
-Авторизация и регистрация:
-<img width="1918" height="987" alt="image" src="https://github.com/user-attachments/assets/1ccf765a-b2dd-4bf5-972e-55aa417551a5" />
-<img width="1919" height="944" alt="image" src="https://github.com/user-attachments/assets/332ab89b-4aea-44c0-b72d-1cefc639cd76" />
-
-
 
 
 
