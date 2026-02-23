@@ -15,6 +15,25 @@ Django-приложение для создания и проведения он
 - Возможность создания опроса
 - Поиск опросов по названию(по подстроке)
 
+### Скриншоты
+Авторизация и регистрация:
+<img width="1918" height="987" alt="image" src="https://github.com/user-attachments/assets/1ccf765a-b2dd-4bf5-972e-55aa417551a5" />
+<img width="1919" height="944" alt="image" src="https://github.com/user-attachments/assets/332ab89b-4aea-44c0-b72d-1cefc639cd76" />
+
+
+Главная страница и результат поиска:
+<img width="1918" height="986" alt="image" src="https://github.com/user-attachments/assets/157e0074-edd1-4340-8ef4-e7f5fe67685f" />
+
+Добавлени опроса:
+<img width="1917" height="987" alt="image" src="https://github.com/user-attachments/assets/6b7ec33c-22cd-4502-9230-f76f97abddb4" />
+
+Прохождение опроса:
+<img width="1915" height="982" alt="image" src="https://github.com/user-attachments/assets/5995d71d-e71e-4f92-a800-6d4569f8dce9" />
+
+Просмотр результатов:
+<img width="1919" height="989" alt="image" src="https://github.com/user-attachments/assets/523586b6-96ed-4cf7-a1cf-f51f10dece3b" />
+<img width="1919" height="990" alt="image" src="https://github.com/user-attachments/assets/00ba603e-fa15-4c71-89ec-836da968f59c" />
+
 ### Требования
 - Python 3.10+
 - pip
@@ -36,20 +55,6 @@ Django-приложение для создания и проведения он
 Авторизация и регистрация:
 <img width="1918" height="987" alt="image" src="https://github.com/user-attachments/assets/1ccf765a-b2dd-4bf5-972e-55aa417551a5" />
 <img width="1919" height="944" alt="image" src="https://github.com/user-attachments/assets/332ab89b-4aea-44c0-b72d-1cefc639cd76" />
-
-
-Главная страница и результат поиска:
-<img width="1918" height="986" alt="image" src="https://github.com/user-attachments/assets/157e0074-edd1-4340-8ef4-e7f5fe67685f" />
-
-Добавлени опроса:
-<img width="1917" height="987" alt="image" src="https://github.com/user-attachments/assets/6b7ec33c-22cd-4502-9230-f76f97abddb4" />
-
-Прохождение опроса:
-<img width="1915" height="982" alt="image" src="https://github.com/user-attachments/assets/5995d71d-e71e-4f92-a800-6d4569f8dce9" />
-
-Просмотр результатов:
-<img width="1919" height="989" alt="image" src="https://github.com/user-attachments/assets/523586b6-96ed-4cf7-a1cf-f51f10dece3b" />
-<img width="1919" height="990" alt="image" src="https://github.com/user-attachments/assets/00ba603e-fa15-4c71-89ec-836da968f59c" />
 
 
 
