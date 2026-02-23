@@ -24,7 +24,7 @@ Django-приложение для создания и проведения он
 Главная страница и результат поиска:
 <img width="1918" height="986" alt="image" src="https://github.com/user-attachments/assets/157e0074-edd1-4340-8ef4-e7f5fe67685f" />
 
-Добавлени опроса:
+Добавление опроса:
 <img width="1917" height="987" alt="image" src="https://github.com/user-attachments/assets/6b7ec33c-22cd-4502-9230-f76f97abddb4" />
 
 Прохождение опроса:
